@@ -1,17 +1,27 @@
 <?php
 
-abstract class Database 
+abstract class Database
 {
-    private $conn;
+    public $conn;
+    public $servername = "localhost";
+    public $username = "root";
+    public $password = "";
     public $dbname = "parrocha";
 
-    public function connect()
+    public function __construct()
     {
-        $this->conn = new mysqli("localhost","root","");
-        $this->conn->query("CREATE DATABASE IF NOT EXISTS $this->dbname");
-        $this->conn = new mysqli("localhost","root","", $this->dbname);
+        $this->conn = new mysqli($this->servername, $this->username, $this->password);
+    }
+    abstract public function db(): string;
+}
+class Dbname extends Database
+{
+    public function db(): string
+    {
+        $connect = "CREATE DATABASE IF NOT EXISTS $this->dbname";
+        return $this->conn->query($connect);
     }
 }
-$connect = new Database();
-$connect->connect();
+$test = new Dbname();
+$test->db();
 ?>
